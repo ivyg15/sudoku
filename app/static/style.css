@@ -1,0 +1,97 @@
+#puzzleContainer{
+  width: 30%;
+  aspect-ratio: 1/1;
+}
+
+table{
+  border-collapse: collapse;
+  width: 100%;
+  height: 100%;
+}
+
+td{
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  box-sizing: border-box;
+  width: 11.11%;
+  height: 11.11%;
+  position: relative;
+  background-color: white;
+}
+
+.pencilContainer{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.valContainer{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.top{
+  border-top: 2px solid black;
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+}
+
+.bottom{
+  border-top: 1px solid black;
+  border-bottom: 2px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+}
+
+.left{
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  border-left: 2px solid black;
+  border-right: 1px solid black;
+}
+
+.right{
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 2px solid black;
+}
+
+.topleft{
+  border-top: 2px solid black;
+  border-bottom: 1px solid black;
+  border-left: 2px solid black;
+  border-right: 1px solid black;
+}
+
+.topright{
+  border-top: 2px solid black;
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 2px solid black;
+}
+
+.bottomleft{
+  border-top: 1px solid black;
+  border-bottom: 2px solid black;
+  border-left: 2px solid black;
+  border-right: 1px solid black;
+}
+
+.bottomright{
+  border-top: 1px solid black;
+  border-bottom: 2px solid black;
+  border-left: 1px solid black;
+  border-right: 2px solid black;
+}

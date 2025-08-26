@@ -193,7 +193,7 @@ togglePencil.onclick = function(){
   }
   isPencil = !isPencil;
 }
-document.body.appendChild(togglePencil);
+document.getElementById("buttonsContainer").appendChild(togglePencil);
 
 var functions = document.createElement("div");
 functions.setAttribute("id", "dropdownButton");
@@ -217,8 +217,8 @@ for (let i = 0; i < functionNames.length; i++){
   }
   dropdown.appendChild(choice);
 }
-document.body.appendChild(functions);
-document.body.appendChild(dropdown);
+document.getElementById("buttonsContainer").appendChild(functions);
+document.getElementById("buttonsContainer").appendChild(dropdown);
 
 function highlightCell(idArr){
   for (let i = 0; i < idArr.length; i++){
@@ -246,7 +246,7 @@ function highlightCell(idArr){
 
 var test = document.createElement("button");
 test.onclick = sendSudoku;
-document.body.appendChild(test);
+document.getElementById("buttonsContainer").appendChild(test);
 
 async function sendSudoku() {
   var data = new FormData();

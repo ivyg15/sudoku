@@ -1,6 +1,40 @@
+#flexContainer{
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  gap: 2%;
+}
+
 #puzzleContainer{
-  width: 30%;
+  height: 80%;
   aspect-ratio: 1/1;
+}
+
+#buttonsContainer{
+  flex-direction: column;
+}
+
+#dropdownButton{
+  background-color: white;
+  border: 1px solid rgb(152, 3, 252);
+  width: 150px;
+}
+
+#dropdownContainer{
+  width: 150px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.dropdown{
+  background-color: rgb(230, 230, 230);
+  border: 1px solid rgb(194,194,194);
+  width: 100%;
+}
+
+button{
+  border-radius: 5px;
+  background-color: white;
+  border-color: rgb(194, 194, 194);
 }
 
 table{

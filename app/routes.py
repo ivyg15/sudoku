@@ -20,6 +20,10 @@ def submit_data():
                     sudoku[i-1][j-1][pencils%10-1] = 1
                     pencils //= 10
 
-    response = functions.swordfish(sudoku, 0)
-    print(response)
+    functionName = data.get("function")
+    if functionName == "- - -":
+        response = []
+    else:
+        chosenFunction = functions.functionsDict[data.get("function")]
+        response = chosenFunction(sudoku)
     return jsonify({"message": response})

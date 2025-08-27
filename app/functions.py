@@ -51,7 +51,6 @@ def test(sudoku):
     return data
 
 def obvious(sudokuBoard, check): # every option in a row is in the same square, or other way around
-    print("started")
     # check a row
     for y in range(9):
         sum = 0
@@ -60,9 +59,7 @@ def obvious(sudokuBoard, check): # every option in a row is in the same square, 
                 sum += 2**(x//3)
         if sum == 1 or sum == 2 or sum == 4:
             x = list(filter(lambda e: sudokuBoard[y][e][check], [e for e in range(9)]))
-            print("almost return")
             return conversion(x, y)
-    print("rows")
     # check a column
     for x in range(9):
         sum = 0
@@ -72,7 +69,6 @@ def obvious(sudokuBoard, check): # every option in a row is in the same square, 
         if sum == 1 or sum == 2 or sum == 4:
             y = list(filter(lambda e: sudokuBoard[e][x][check], [e for e in range(9)]))
             return conversion(x, y)
-    print("columns")
     # check a square
     for square in range( 9):
         X = square % 3
@@ -365,6 +361,27 @@ def swordfish(sudokuBoard, check):
             return conversion(x, y)
     return []  
 
+def obviousUsable(sudokuBoard): # iterates over all 9 pencil values
+    for check in range(9):
+        res = obvious(sudokuBoard, check)
+        if res: # not empty
+            return res
+    return []
+
+def XWingUsable(sudokuBoard):
+    for check in range(9):
+        res = XWing(sudokuBoard, check)
+        if res: # not empty
+            return res
+    return []
+
+def swordfishUsable(sudokuBoard):
+    for check in range(9):
+        res = swordfish(sudokuBoard, check)
+        if res: # not empty
+            return res
+    return []
+
 c3 = [None]*84 # short for 9 choose 3
 index = 0
 for i in range(9):
@@ -388,3 +405,8 @@ def toBinFormat(n):
         ans += 2**(digit-1)
         n //= 10
     return ans
+
+functionsDict = {"Obvious":obviousUsable, 
+                 "Generalized Pairs":pairs, 
+                 "X-Wing":XWingUsable, 
+                 "Swordfish":swordfishUsable}

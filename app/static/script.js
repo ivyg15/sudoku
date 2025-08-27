@@ -254,7 +254,7 @@ async function sendSudoku() {
     for (let x=1; x<10; x++){
       var id = (y*10+x).toString();
       var value = document.getElementById("v"+id).innerHTML;
-      if (value === ""){
+      if (value === ""){ // only send the pencils, not the final values
         for (let p=1; p<10; p++){
           var pencil = document.getElementById(id+p.toString());
           if (pencil.innerHTML !== ""){
@@ -265,11 +265,9 @@ async function sendSudoku() {
           data.append(id.toString(), value.toString());
         }
       }
-      else{
-        value = null; // only send the pencils, not the final values
-      }
     }
   }
+  data.append("function", functions.textContent);
   
   try {
     const response = await fetch('/submit_data', {

@@ -17,6 +17,21 @@ def pencilSum(x, y, sudokuBoard):
         sum += sudokuBoard[y][x][c] * (2**c)
     return sum
 
+def subsetSum(number, shape, sudokuBoard, n):
+    sum = 0
+    if shape == "row": # y = number
+        for x in range(9):
+            sum += sudokuBoard[number][x][n] * (2**x)
+    elif shape == "col": # x = number
+        for y in range(9):
+            sum += sudokuBoard[y][number][n] * (2**y)
+    else:
+        for i in range(9):
+            y = i // 3
+            x = i % 3
+            sum += sudokuBoard[y][x][n] * (2**i)
+    return sum
+
 def numBits(n):
     count = 0
     while n > 0:
@@ -40,6 +55,24 @@ def nPerRow(sudokuBoard, pencil, n, x = None, y = None): # but like, 2 = 2 and 3
         if index > 10 and index < 10**n:
             return index
     return -1
+
+def toBinFormat(n):
+    ans = 0
+    for i in range(3):
+        digit = n%10
+        ans += 2**(digit-1)
+        n //= 10
+    return ans
+
+def binToList(n):
+    ans = []
+    i = 0
+    while n > 0:
+        if n&1:
+            ans.append(i)
+        i += 1
+        n >>= 1
+    return ans
 
 def test(sudoku):
     print("start")
@@ -234,7 +267,156 @@ def pairs(sudokuBoard): # but generalized to not just pairs
             if subsetSum == 4:
                 return conversion(x, y)
     return []
-    
+
+def hiddenSubset(sudokuBoard): # there is a number than can go only in two places, there is another with same property
+    # row
+    for y in range(9):
+        counter = {}
+        for n in range(9):
+            options = subsetSum(y, "row", sudokuBoard, n)
+            if options != 0 and options not in counter.keys():
+                counter[options] = []
+            if options != 0:
+                counter[options].append(n)
+        keys = counter.keys()
+        for c in keys:
+            subsetSum = 0
+            for cc in keys:
+                if cc!= 0 and c&cc == cc: # subset
+                    subsetSum += len(counter[cc])
+            if subsetSum == numBits(c):
+                ans = []
+                xs = binToList(c)
+                for x in xs:
+                    ans.append(10*(y+1)+x+1)
+                return ans
+        
+        # 12 23 31 pattern
+        for num in c3:
+            subsetSum = 0
+            for subset in [num//10, 10*(num//100)+num%10, num%100]:
+                s = toBinFormat(subset)
+                if s in keys:
+                    subsetSum += 1
+            if subsetSum == 3:
+                ans = []
+                xs = binToList(num)
+                for x in xs:
+                    ans.append(10*(y+1)+x+1)
+                return ans
+        # same thing but for subsets of 4
+        for num in c4: # already in that binary format
+            subsetSum = 0
+            for cc in keys:
+                if cc != 0 and num&cc == cc:
+                    subsetSum += len(counter[cc])
+            if subsetSum == 4:
+                ans = []
+                xs = binToList(num)
+                for x in xs:
+                    ans.append(10*(y+1)+x+1)
+                return ans  
+   
+    # column
+    for x in range(9):
+        counter = {}
+        for n in range(9):
+            options = subsetSum(x, "col", sudokuBoard, n)
+            if options != 0 and options not in counter.keys():
+                counter[options] = []
+            if options != 0:
+                counter[options].append(n)
+        keys = counter.keys()
+        for c in keys:
+            subsetSum = 0
+            for cc in keys:
+                if cc!= 0 and c&cc == cc: # subset
+                    subsetSum += len(counter[cc])
+            if subsetSum == numBits(c):
+                ans = []
+                ys = binToList(c)
+                for y in ys:
+                    ans.append(10*(y+1)+x+1)
+                return ans
+        
+        # 12 23 31 pattern
+        for num in c3:
+            subsetSum = 0
+            for subset in [num//10, 10*(num//100)+num%10, num%100]:
+                s = toBinFormat(subset)
+                if s in keys:
+                    subsetSum += 1
+            if subsetSum == 3:
+                ans = []
+                ys = binToList(num)
+                for y in ys:
+                    ans.append(10*(y+1)+x+1)
+                return ans
+        # same thing but for subsets of 4
+        for num in c4: # already in that binary format
+            subsetSum = 0
+            for cc in keys:
+                if cc != 0 and num&cc == cc:
+                    subsetSum += len(counter[cc])
+            if subsetSum == 4:
+                ans = []
+                ys = binToList(num)
+                for y in ys:
+                    ans.append(10*(y+1)+x+1)
+                return ans
+
+    # square
+    for square in range(9):
+        X = (square%3)*3
+        Y = (square//3)*3
+        counter = {}
+        for n in range(9):
+            options = subsetSum(square, "sq", sudokuBoard, n)
+            if options != 0 and options not in counter.keys():
+                counter[options] = []
+            if options != 0:
+                counter[options].append(n)
+        keys = counter.keys()
+        for c in keys:
+            subsetSum = 0
+            for cc in keys:
+                if cc != 0 and c&cc == cc:
+                    subsetSum += len(counter[cc])
+            if subsetSum == numBits(c):
+                ans = []
+                sq = binToList(c)
+                for s in sq:
+                    ans.append(10*(Y+1+s//3) + (X+1+(s%3)))
+                return ans
+
+        # 12 23 31 pattern
+        for num in c3:
+            subsetSum = 0
+            for subset in [num//10, 10*(num//100)+num%10, num%100]:
+                s = toBinFormat(subset)
+                if s in keys:
+                    subsetSum += 1
+            if subsetSum == 3:
+                ans = []
+                sq = binToList(c)
+                for s in sq:
+                    ans.append(10*(Y+1+s//3) + (X+1+(s%3)))
+                return ans
+        
+        # same thing but for subsets of 4
+        for num in c4: # already in that binary format
+            subsetSum = 0
+            for cc in keys:
+                if cc != 0 and num&cc == cc:
+                    subsetSum += len(counter[cc])
+            if subsetSum == 4:
+                ans = []
+                sq = binToList(c)
+                for s in sq:
+                    ans.append(10*(Y+1+s//3) + (X+1+(s%3)))
+                return ans
+    return []
+
 def XWing(sudokuBoard, check):
     # row
     counter = {}
@@ -398,15 +580,8 @@ for i in range(9):
                 c4[index] = 2**i + 2**j + 2**k + 2**l
                 index += 1
 
-def toBinFormat(n):
-    ans = 0
-    for i in range(3):
-        digit = n%10
-        ans += 2**(digit-1)
-        n //= 10
-    return ans
-
 functionsDict = {"Obvious":obviousUsable, 
-                 "Generalized Pairs":pairs, 
+                 "Subsets":pairs, 
                  "X-Wing":XWingUsable, 
-                 "Swordfish":swordfishUsable}
+                 "Swordfish":swordfishUsable,
+                 "Hidden Subsets":hiddenSubset}

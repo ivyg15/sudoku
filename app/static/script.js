@@ -206,7 +206,7 @@ functions.onclick = function(){
 var dropdown = document.createElement("div");
 dropdown.setAttribute("hidden", "hidden");
 dropdown.setAttribute("id", "dropdownContainer");
-var functionNames = ["Obvious", "Generalized Pairs", "X-Wing", "Swordfish"];
+var functionNames = ["Obvious", "Subsets", "X-Wing", "Swordfish", "Hidden Subsets"];
 for (let i = 0; i < functionNames.length; i++){
   var choice = document.createElement("div");
   choice.textContent = functionNames[i];

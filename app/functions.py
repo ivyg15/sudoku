@@ -17,7 +17,7 @@ def pencilSum(x, y, sudokuBoard):
         sum += sudokuBoard[y][x][c] * (2**c)
     return sum
 
-def subsetSum(number, shape, sudokuBoard, n):
+def optionsSum(number, shape, sudokuBoard, n):
     sum = 0
     if shape == "row": # y = number
         for x in range(9):
@@ -26,10 +26,12 @@ def subsetSum(number, shape, sudokuBoard, n):
         for y in range(9):
             sum += sudokuBoard[y][number][n] * (2**y)
     else:
+        X = (number%3)*3
+        Y = (number//3)*3
         for i in range(9):
             y = i // 3
             x = i % 3
-            sum += sudokuBoard[y][x][n] * (2**i)
+            sum += sudokuBoard[Y+y][X+x][n] * (2**i)
     return sum
 
 def numBits(n):
@@ -58,7 +60,7 @@ def nPerRow(sudokuBoard, pencil, n, x = None, y = None): # but like, 2 = 2 and 3
 
 def toBinFormat(n):
     ans = 0
-    for i in range(3):
+    for i in range(2):
         digit = n%10
         ans += 2**(digit-1)
         n //= 10
@@ -171,11 +173,13 @@ def pairs(sudokuBoard): # but generalized to not just pairs
         for num in c4: # already in that binary format
             x = []
             subsetSum = 0
+            union = 0
             for cc in keys:
                 if cc != 0 and num&cc == cc:
                     subsetSum += len(counter[cc])
                     x += counter[cc]
-            if subsetSum == 4:
+                    union |= cc
+            if subsetSum == 4 and numBits(union) == 4:
                 return conversion(x, y)
 
     # column
@@ -214,11 +218,13 @@ def pairs(sudokuBoard): # but generalized to not just pairs
         for num in c4: # already in that binary format
             y = []
             subsetSum = 0
+            union = 0
             for cc in keys:
                 if cc != 0 and num&cc == cc:
                     subsetSum += len(counter[cc])
                     y += counter[cc]
-            if subsetSum == 4:
+                    union |= cc
+            if subsetSum == 4 and numBits(union) == 4:
                 return conversion(x, y)
             
     # square
@@ -260,12 +266,14 @@ def pairs(sudokuBoard): # but generalized to not just pairs
         for num in c4: # already in that binary format
             data = []
             subsetSum = 0
+            union = 0
             for cc in keys:
                 if cc != 0 and num&cc == cc:
                     subsetSum += len(counter[cc])
                     data += counter[cc]
-            if subsetSum == 4:
-                return conversion(x, y)
+                    union |= cc
+            if subsetSum == 4 and numBits(union) == 4:
+                return data
     return []
 
 def hiddenSubset(sudokuBoard): # there is a number than can go only in two places, there is another with same property
@@ -273,7 +281,7 @@ def hiddenSubset(sudokuBoard): # there is a number than can go only in two place
     for y in range(9):
         counter = {}
         for n in range(9):
-            options = subsetSum(y, "row", sudokuBoard, n)
+            options = optionsSum(y, "row", sudokuBoard, n)
             if options != 0 and options not in counter.keys():
                 counter[options] = []
             if options != 0:
@@ -300,17 +308,19 @@ def hiddenSubset(sudokuBoard): # there is a number than can go only in two place
                     subsetSum += 1
             if subsetSum == 3:
                 ans = []
-                xs = binToList(num)
-                for x in xs:
-                    ans.append(10*(y+1)+x+1)
+                num = str(num)
+                for x in num:
+                    ans.append(10*(y+1)+int(x))
                 return ans
         # same thing but for subsets of 4
         for num in c4: # already in that binary format
             subsetSum = 0
+            union = 0
             for cc in keys:
                 if cc != 0 and num&cc == cc:
                     subsetSum += len(counter[cc])
-            if subsetSum == 4:
+                    union |= cc
+            if subsetSum == 4 and numBits(union) == 4:
                 ans = []
                 xs = binToList(num)
                 for x in xs:
@@ -321,7 +331,7 @@ def hiddenSubset(sudokuBoard): # there is a number than can go only in two place
     for x in range(9):
         counter = {}
         for n in range(9):
-            options = subsetSum(x, "col", sudokuBoard, n)
+            options = optionsSum(x, "col", sudokuBoard, n)
             if options != 0 and options not in counter.keys():
                 counter[options] = []
             if options != 0:
@@ -348,17 +358,19 @@ def hiddenSubset(sudokuBoard): # there is a number than can go only in two place
                     subsetSum += 1
             if subsetSum == 3:
                 ans = []
-                ys = binToList(num)
-                for y in ys:
-                    ans.append(10*(y+1)+x+1)
+                num = str(num)
+                for y in num:
+                    ans.append(10*int(y)+x+1)
                 return ans
         # same thing but for subsets of 4
         for num in c4: # already in that binary format
             subsetSum = 0
+            union = 0
             for cc in keys:
                 if cc != 0 and num&cc == cc:
                     subsetSum += len(counter[cc])
-            if subsetSum == 4:
+                    union |= cc
+            if subsetSum == 4 and numBits(union) == 4:
                 ans = []
                 ys = binToList(num)
                 for y in ys:
@@ -371,7 +383,7 @@ def hiddenSubset(sudokuBoard): # there is a number than can go only in two place
         Y = (square//3)*3
         counter = {}
         for n in range(9):
-            options = subsetSum(square, "sq", sudokuBoard, n)
+            options = optionsSum(square, "sq", sudokuBoard, n)
             if options != 0 and options not in counter.keys():
                 counter[options] = []
             if options != 0:
@@ -386,7 +398,7 @@ def hiddenSubset(sudokuBoard): # there is a number than can go only in two place
                 ans = []
                 sq = binToList(c)
                 for s in sq:
-                    ans.append(10*(Y+1+s//3) + (X+1+(s%3)))
+                    ans.append(10*(Y+1+s//3) + (X+1+s%3))
                 return ans
 
         # 12 23 31 pattern
@@ -398,20 +410,21 @@ def hiddenSubset(sudokuBoard): # there is a number than can go only in two place
                     subsetSum += 1
             if subsetSum == 3:
                 ans = []
-                sq = binToList(c)
-                for s in sq:
-                    ans.append(10*(Y+1+s//3) + (X+1+(s%3)))
+                num = str(num)
+                for s in num:
+                    ans.append(10*(Y+1+(int(s)-1)//3) + (X+1+(int(s)-1)%3))
                 return ans
-        
         # same thing but for subsets of 4
         for num in c4: # already in that binary format
             subsetSum = 0
+            union = 0
             for cc in keys:
                 if cc != 0 and num&cc == cc:
                     subsetSum += len(counter[cc])
-            if subsetSum == 4:
+                    union |= cc
+            if subsetSum == 4 and numBits(union) == 4:
                 ans = []
-                sq = binToList(c)
+                sq = binToList(num)
                 for s in sq:
                     ans.append(10*(Y+1+s//3) + (X+1+(s%3)))
                 return ans

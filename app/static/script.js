@@ -45,7 +45,12 @@ for (let i = 0; i < 9; i++){
       if (activeCell !== null){
         neighborColors(activeCell.id, "white");
       }
-      activeCell = e.target.parentElement.parentElement;
+      if (e.target.className === "pencil"){
+        activeCell = e.target.parentElement.parentElement;
+      }
+      else if (e.target.className === "pencilContainer"){
+        activeCell = e.target.parentElement;
+      }
       neighborColors(activeCell.id, "lightcyan");
       activeCell.style.backgroundColor = "rgb(182, 250, 250)";
     });
@@ -82,6 +87,7 @@ function handleKeyDown(e){
     editCell(val);
   }
   else if (val === "ArrowDown" || val === "ArrowUp" || val === "ArrowLeft" || val === "ArrowRight"){
+    e.preventDefault();
     move(val);
   }
 }

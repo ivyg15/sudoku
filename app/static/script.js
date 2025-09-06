@@ -80,20 +80,32 @@ for (let i = 1; i < 10; i++){
 }
 
 document.addEventListener("keydown", handleKeyDown);
+document.addEventListener("keyup", function(e){
+  if (e.key === "Shift"){
+    pencilMode();
+  }
+});
 
+const shiftDigits = ["!", "@", "#", "$", "%", "^", "&", "*", "("];
 function handleKeyDown(e){
   var val = e.key;
-  if (/^\d+$/.test(val) || val === "Backspace"){
+  if (/^\d+$/.test(val) || val === "Backspace" || shiftDigits.includes(val)){
+    if (shiftDigits.includes(val)){
+      val = shiftDigits.indexOf(val) + 1;
+    }
     editCell(val);
   }
   else if (val === "ArrowDown" || val === "ArrowUp" || val === "ArrowLeft" || val === "ArrowRight"){
     e.preventDefault();
     move(val);
   }
+  if (val === "Shift" && !e.repeat){
+    pencilMode();
+  }
 }
 
 function editCell(val){
-  if (isPencil && document.getElementById("v"+activeCell.id).innerHTML === "" && /^\d+$/.test(val)){
+  if (isPencil && document.getElementById("v"+activeCell.id).innerHTML === ""){
     var pencil = document.getElementById(activeCell.id+val);
     if (pencil.innerHTML === ""){
       pencil.innerHTML = val;
@@ -103,7 +115,7 @@ function editCell(val){
     }
   }
     
-  else if (!(isPencil) && /^\d+$/.test(val)){
+  else if (!(isPencil)){
     for (let i = 1; i < 10; i++){
       var id = activeCell.id+i.toString();
       var pencil = document.getElementById(id);
@@ -166,6 +178,18 @@ function move(val){
   }
 }
 
+function pencilMode(){
+  if (isPencil){
+    togglePencil.textContent = "Normal Mode";
+    togglePencil.style.borderColor = "rgb(194, 194, 194)";
+  }
+  else{
+    togglePencil.textContent = "Pencil Mode";
+    togglePencil.style.borderColor = "rgb(152, 3, 252)";
+  }
+  isPencil = !isPencil;
+}
+
 function neighborColors(id, color){
   var y = Math.floor(id/10);
   var x = id % 10;
@@ -188,17 +212,7 @@ function neighborColors(id, color){
 var togglePencil = document.createElement("button");
 togglePencil.textContent = "Normal Mode";
 togglePencil.style.borderColor = "rgb(194, 194, 194)";
-togglePencil.onclick = function(){
-  if (isPencil){
-    togglePencil.textContent = "Normal Mode";
-    togglePencil.style.borderColor = "rgb(194, 194, 194)";
-  }
-  else{
-    togglePencil.textContent = "Pencil Mode";
-    togglePencil.style.borderColor = "rgb(152, 3, 252)";
-  }
-  isPencil = !isPencil;
-}
+togglePencil.onclick = pencilMode;
 document.getElementById("buttonsContainer").appendChild(togglePencil);
 
 var functions = document.createElement("div");

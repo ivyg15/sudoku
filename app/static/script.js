@@ -237,6 +237,9 @@ for (let i = 0; i < functionNames.length; i++){
   }
   dropdown.appendChild(choice);
 }
+var linebreak = document.createElement("p");
+linebreak.textContent="\n";
+document.getElementById("buttonsContainer").appendChild(linebreak);
 document.getElementById("buttonsContainer").appendChild(functions);
 document.getElementById("buttonsContainer").appendChild(dropdown);
 
@@ -265,6 +268,7 @@ function highlightCell(idArr){
 }
 
 var test = document.createElement("button");
+test.textContent="Get a Hint!";
 test.onclick = sendSudoku;
 document.getElementById("buttonsContainer").appendChild(test);
 

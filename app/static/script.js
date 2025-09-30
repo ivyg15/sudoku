@@ -243,6 +243,14 @@ document.getElementById("buttonsContainer").appendChild(linebreak);
 document.getElementById("buttonsContainer").appendChild(functions);
 document.getElementById("buttonsContainer").appendChild(dropdown);
 
+var secondLineBreak = document.createElement("p");
+secondLineBreak.textContent = "\n";
+clearButton = document.createElement("button");
+clearButton.textContent = "Reset Memory";
+clearButton.onclick = clearMemory;
+document.getElementById("buttonsContainer").appendChild(secondLineBreak);
+document.getElementById("buttonsContainer").appendChild(clearButton);
+
 function highlightCell(idArr){
   for (let i = 0; i < idArr.length; i++){
     var cell = document.getElementById(idArr[i]);
@@ -305,6 +313,22 @@ async function sendSudoku() {
 
     const result = await response.json();
     highlightCell(result.message);
+  } 
+  catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+async function clearMemory() {
+  document.body.append("hi");
+  try {
+    const response = await fetch('/clear_memory', {
+        method: 'POST',
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
   } 
   catch (error) {
     console.error('Error:', error);

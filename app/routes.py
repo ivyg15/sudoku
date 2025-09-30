@@ -27,3 +27,8 @@ def submit_data():
         chosenFunction = functions.functionsDict[data.get("function")]
         response = chosenFunction(sudoku)
     return jsonify({"message": response})
+
+@app.route('/clear_memory', methods=['POST'])
+def clear_memory():
+    functions.clearMemory()
+    return jsonify({"success": 1})

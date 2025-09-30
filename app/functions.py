@@ -9,7 +9,7 @@ def conversion(xs, ys):
     else:
         for i in range(len(xs)):
             data.append(10*(ys[i]+1)+(xs[i]+1))
-    return data
+    return tuple(sorted(data))
 
 def pencilSum(x, y, sudokuBoard):
     sum = 0
@@ -156,7 +156,10 @@ def pairs(sudokuBoard): # but generalized to not just pairs
                     subsetSum += len(counter[cc])
                     x += counter[cc]
             if subsetSum == numBits(c):
-                return conversion(x, y)
+                possibility = conversion(x,y)
+                if possibility not in memory:
+                    memory.add(possibility)
+                    return possibility
         
         # 12 23 31 pattern
         for num in c3:
@@ -168,7 +171,10 @@ def pairs(sudokuBoard): # but generalized to not just pairs
                     subsetSum += 1
                     x += counter[s]
             if subsetSum == 3:
-                return conversion(x, y)
+                possibility = conversion(x,y)
+                if possibility not in memory:
+                    memory.add(possibility)
+                    return possibility
         # same thing but for subsets of 4
         for num in c4: # already in that binary format
             x = []
@@ -180,7 +186,10 @@ def pairs(sudokuBoard): # but generalized to not just pairs
                     x += counter[cc]
                     union |= cc
             if subsetSum == 4 and numBits(union) == 4:
-                return conversion(x, y)
+                possibility = conversion(x,y)
+                if possibility not in memory:
+                    memory.add(possibility)
+                    return possibility
 
     # column
     for x in range(9):
@@ -200,7 +209,10 @@ def pairs(sudokuBoard): # but generalized to not just pairs
                     subsetSum += len(counter[cc])
                     y += counter[cc]
             if subsetSum == numBits(c):
-                return conversion(x, y)
+                possibility = conversion(x,y)
+                if possibility not in memory:
+                    memory.add(possibility)
+                    return possibility
        
         # 12 23 31 pattern
         for num in c3:
@@ -212,7 +224,10 @@ def pairs(sudokuBoard): # but generalized to not just pairs
                     subsetSum += 1
                     y += counter[s]
             if subsetSum == 3:
-                return conversion(x, y)
+                possibility = conversion(x,y)
+                if possibility not in memory:
+                    memory.add(possibility)
+                    return possibility
         
         # same thing but for subsets of 4
         for num in c4: # already in that binary format
@@ -225,7 +240,10 @@ def pairs(sudokuBoard): # but generalized to not just pairs
                     y += counter[cc]
                     union |= cc
             if subsetSum == 4 and numBits(union) == 4:
-                return conversion(x, y)
+                possibility = conversion(x,y)
+                if possibility not in memory:
+                    memory.add(possibility)
+                    return possibility
             
     # square
     for square in range(9):
@@ -248,7 +266,10 @@ def pairs(sudokuBoard): # but generalized to not just pairs
                     subsetSum += len(counter[cc])
                     data += counter[cc]
             if subsetSum == numBits(c):
-                return data
+                possibility = tuple(sorted(data))
+                if possibility not in memory:
+                    memory.add(possibility)
+                    return possibility
 
         # 12 23 31 pattern
         for num in c3:
@@ -260,7 +281,10 @@ def pairs(sudokuBoard): # but generalized to not just pairs
                     subsetSum += 1
                     data += counter[s]
             if subsetSum == 3:
-                return data
+                possibility = tuple(sorted(data))
+                if possibility not in memory:
+                    memory.add(possibility)
+                    return possibility
         
         # same thing but for subsets of 4
         for num in c4: # already in that binary format
@@ -273,7 +297,10 @@ def pairs(sudokuBoard): # but generalized to not just pairs
                     data += counter[cc]
                     union |= cc
             if subsetSum == 4 and numBits(union) == 4:
-                return data
+                possibility = tuple(sorted(data))
+                if possibility not in memory:
+                    memory.add(possibility)
+                    return possibility
     return []
 
 def hiddenSubset(sudokuBoard): # there is a number than can go only in two places, there is another with same property
@@ -297,7 +324,10 @@ def hiddenSubset(sudokuBoard): # there is a number than can go only in two place
                 xs = binToList(c)
                 for x in xs:
                     ans.append(10*(y+1)+x+1)
-                return ans
+                possibility = tuple(sorted(ans))
+                if possibility not in memory:
+                    memory.add(possibility)
+                    return possibility
         
         # 12 23 31 pattern
         for num in c3:
@@ -311,7 +341,10 @@ def hiddenSubset(sudokuBoard): # there is a number than can go only in two place
                 num = str(num)
                 for x in num:
                     ans.append(10*(y+1)+int(x))
-                return ans
+                possibility = tuple(sorted(ans))
+                if possibility not in memory:
+                    memory.add(possibility)
+                    return possibility
         # same thing but for subsets of 4
         for num in c4: # already in that binary format
             subsetSum = 0
@@ -325,7 +358,10 @@ def hiddenSubset(sudokuBoard): # there is a number than can go only in two place
                 xs = binToList(num)
                 for x in xs:
                     ans.append(10*(y+1)+x+1)
-                return ans  
+                possibility = tuple(sorted(ans))
+                if possibility not in memory:
+                    memory.add(possibility)
+                    return possibility 
    
     # column
     for x in range(9):
@@ -347,7 +383,10 @@ def hiddenSubset(sudokuBoard): # there is a number than can go only in two place
                 ys = binToList(c)
                 for y in ys:
                     ans.append(10*(y+1)+x+1)
-                return ans
+                possibility = tuple(sorted(ans))
+                if possibility not in memory:
+                    memory.add(possibility)
+                    return possibility
         
         # 12 23 31 pattern
         for num in c3:
@@ -361,7 +400,10 @@ def hiddenSubset(sudokuBoard): # there is a number than can go only in two place
                 num = str(num)
                 for y in num:
                     ans.append(10*int(y)+x+1)
-                return ans
+                possibility = tuple(sorted(ans))
+                if possibility not in memory:
+                    memory.add(possibility)
+                    return possibility
         # same thing but for subsets of 4
         for num in c4: # already in that binary format
             subsetSum = 0
@@ -375,7 +417,10 @@ def hiddenSubset(sudokuBoard): # there is a number than can go only in two place
                 ys = binToList(num)
                 for y in ys:
                     ans.append(10*(y+1)+x+1)
-                return ans
+                possibility = tuple(sorted(ans))
+                if possibility not in memory:
+                    memory.add(possibility)
+                    return possibility
 
     # square
     for square in range(9):
@@ -399,7 +444,10 @@ def hiddenSubset(sudokuBoard): # there is a number than can go only in two place
                 sq = binToList(c)
                 for s in sq:
                     ans.append(10*(Y+1+s//3) + (X+1+s%3))
-                return ans
+                possibility = tuple(sorted(ans))
+                if possibility not in memory:
+                    memory.add(possibility)
+                    return possibility
 
         # 12 23 31 pattern
         for num in c3:
@@ -413,7 +461,10 @@ def hiddenSubset(sudokuBoard): # there is a number than can go only in two place
                 num = str(num)
                 for s in num:
                     ans.append(10*(Y+1+(int(s)-1)//3) + (X+1+(int(s)-1)%3))
-                return ans
+                possibility = tuple(sorted(ans))
+                if possibility not in memory:
+                    memory.add(possibility)
+                    return possibility
         # same thing but for subsets of 4
         for num in c4: # already in that binary format
             subsetSum = 0
@@ -427,7 +478,10 @@ def hiddenSubset(sudokuBoard): # there is a number than can go only in two place
                 sq = binToList(num)
                 for s in sq:
                     ans.append(10*(Y+1+s//3) + (X+1+(s%3)))
-                return ans
+                possibility = tuple(sorted(ans))
+                if possibility not in memory:
+                    memory.add(possibility)
+                    return possibility
     return []
 
 def XWing(sudokuBoard, check):
@@ -559,21 +613,24 @@ def swordfish(sudokuBoard, check):
 def obviousUsable(sudokuBoard): # iterates over all 9 pencil values
     for check in range(9):
         res = obvious(sudokuBoard, check)
-        if res: # not empty
+        if res and res not in memory: # not empty
+            memory.add(res)
             return res
     return []
 
 def XWingUsable(sudokuBoard):
     for check in range(9):
         res = XWing(sudokuBoard, check)
-        if res: # not empty
+        if res and res not in memory: # not empty
+            memory.add(res)
             return res
     return []
 
 def swordfishUsable(sudokuBoard):
     for check in range(9):
         res = swordfish(sudokuBoard, check)
-        if res: # not empty
+        if res and res not in memory: # not empty
+            memory.add(res)
             return res
     return []
 
@@ -592,6 +649,10 @@ for i in range(9):
             for l in range(k+1, 9):
                 c4[index] = 2**i + 2**j + 2**k + 2**l
                 index += 1
+
+memory = set()
+def clearMemory():
+    memory.clear()
 
 functionsDict = {"Obvious":obviousUsable, 
                  "Subsets":pairs, 
